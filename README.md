@@ -6,19 +6,16 @@
 
 2. สร้าง Virtual Environment และเปิดใช้งาน:
    python -m venv venv
-   source venv/bin/activate  # สำหรับ macOS/Linux
-   venv\Scripts\activate  # สำหรับ Windows
-
-3. ติดตั้ง Package ต่าง ๆ ของโปรเจกต์:
+   
+4. ติดตั้ง Package ต่าง ๆ ของโปรเจกต์:
    pip install -r requirements.txt
 
-4. Log in เข้า MySQL โดยใช้ root:
-   
+5. Log in เข้า MySQL โดยใช้ root:
 
-5. สร้างฐานข้อมูลใน MySQL ชื่อ miniprohotel:
+6. สร้างฐานข้อมูลใน MySQL ชื่อ miniprohotel:
    CREATE DATABASE miniprohotel;
 
-6. สร้าง User สำหรับฐานข้อมูล และกำหนดสิทธิ์:
+7. สร้าง User สำหรับฐานข้อมูล และกำหนดสิทธิ์:
    
    สร้าง user ชื่อ minipro68 พร้อมกำหนด รหัสผ่าน 1234 หรือชื่อและรหัสผ่านตามที่ต้องการก็ได้
 
