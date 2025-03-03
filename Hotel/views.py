@@ -221,7 +221,16 @@ def usersDetail(request, id):
 
 
 
-
+def AddCategory(request):
+    if request.method == 'POST':
+        form = AddCatagoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_rooms')
+    else:
+        form = AddCatagoryForm()
+    context = {'form': form}
+    return render(request, 'Hotel/AddCategory.html', context)
 
 
 

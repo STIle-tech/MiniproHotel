@@ -250,3 +250,25 @@ class CustomUserChangeForm(UserChangeForm):
             'birth_date': 'วันเกิด',
             'gender': 'เพศ',
         }
+
+
+class AddCatagoryForm(forms.ModelForm):
+    class Meta:
+        model = RoomCategory
+        fields = ['rid', 'name', 'description']
+        widgets = {
+            'rid': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        }
+        labels = {
+            'rid': 'รหัสประเภทห้อง',
+            'name': 'ชื่อประเภทห้อง',
+            'description': 'รายละเอียด',
+        }
+
+    def set_for_update(self):
+        """ ใช้สำหรับอัปเดตห้อง ห้ามแก้ไขหมายเลขห้อง """
+        self.fields['rid'].widget.attrs['readonly'] = True
+        self.fields['rid'].widget.attrs['style'] = 'background-color: #f9f9f9;'
+        self.fields['rid'].label = 'รหัสประเภทห้อง (ไม่สามารถแก้ไข)'

@@ -28,6 +28,7 @@ urlpatterns = [
     path('booking_history/', views.booking_history, name='booking_history'),
     path('usersDelete/<id>/', views.usersDelete, name='usersDelete'),
     path('usersDetail/<id>/', views.usersDetail, name='usersDetail'),
+    path('AddCategory/', views.AddCategory, name='AddCategory'),
   
     
 ]
