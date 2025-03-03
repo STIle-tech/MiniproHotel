@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 animated fadeInUp" 
+         style="background: linear-gradient(145deg, #ffffff, #f8f9fa); box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.1);">
+        
+        <!-- หัวข้อเพิ่มห้องพัก -->
+        <div class="card-header text-white text-center py-4" 
+             style="background: linear-gradient(135deg, #ff6f61, #e64a19); box-shadow: 0px 6px 12px rgba(255, 111, 97, 0.5);">
+            <h4 class="mb-0"><i class="fa-solid fa-bed"></i> 🏨 เพิ่มข้อมูลห้องพัก</h4>
+        </div>
+        
+        <!-- เนื้อหาของฟอร์ม -->
+        <div class="card-body p-4" style="background: #f8f9fa; border-radius: 10px;">
+            <form method="POST" enctype="multipart/form-data" id="editForm2">
+                {% csrf_token %}      
+
+                <div class="mb-3">
+                    {{ form.as_p }}        
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <!-- ปุ่มบันทึก -->
+                    <button type="submit" class="btn btn-success px-4 py-2 shadow save-btn" >
+                        <i class=""></i> ✅ บันทึก
+                    </button>
+
+                    <!-- ปุ่มยกเลิก -->
+                    <button type="button" class="btn btn-danger px-4 py-2 shadow cancel-btn" id="cancelBtn">
+                        <i class=""></i> ❌ ยกเลิก
+                    </button>
+                </div>
+            </form>          
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    /* ปุ่มแบบ Gradient & Hover */
+    .save-btn {
+        background: linear-gradient(135deg, #28a745, #218838);
+        transition: all 0.3s ease-in-out;
+        border-radius: 8px;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+    }
+    .save-btn:hover {
+        background: linear-gradient(135deg, #218838, #1e7e34);
+        transform: translateY(-3px);
+        box-shadow: 0px 8px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .cancel-btn {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        transition: all 0.3s ease-in-out;
+        border-radius: 8px;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+    }
+    .cancel-btn:hover {
+        background: linear-gradient(135deg, #c82333, #a71d2a);
+        transform: translateY(-3px);
+        box-shadow: 0px 8px 20px rgba(220, 53, 69, 0.3);
+    }
+
+    /* แอนิเมชันตอนโหลด */
+    .animated {
+        animation-duration: 3s;
+        animation-fill-mode: both;
+    }
+    .fadeInUp {
+        animation-name: fadeInUp;
+    }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 3;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        Swal.fire({
+            title: "ยกเลิกการแก้ไข?",
+            text: "คุณแน่ใจหรือไม่ว่าต้องการยกเลิก?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "ใช่!",
+            cancelButtonText: "ไม่"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/manage_rooms";
+            }
+        });
+    });
+
+    document.getElementById("editForm2").addEventListener("submit", function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "บันทึกข้อมูล?",
+            text: "คุณต้องการเพิ่มข้อมูลห้องพักหรือไม่?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ใช่!",
+            cancelButtonText: "ยกเลิก"
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "กำลังบันทึก...",
+                    text: "กรุณารอสักครู่",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                setTimeout(() => {
+                    event.target.submit();
+                }, 1600);
+                
+            }
+        });
+    });
+</script>
+<br><br>
+{% endblock %}

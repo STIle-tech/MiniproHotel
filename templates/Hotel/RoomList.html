@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(to bottom, #6ebce6, #0c386a);  
+    }
+    .room-container {
+        border: 3px solid #ccc;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        background-color: #ffffff;
+        width: 100%;
+    }
+    .btn-info {
+        background-color: #2f90f9;
+        border-radius: 8px;
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+    }
+    .btn-info:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="room-container">
+    <table class="table  " style="background: linear-gradient(135deg, #e64a19, #ff6f61); box-shadow: 0px 6px 12px rgba(255, 111, 97, 0.5);">
+        <thead  >
+            <tr style="background: linear-gradient(135deg, #ff6f61, #e64a19); box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5);" >
+                <th class="text-center " style="background: linear-gradient(135deg, #e64a19, #ff6f61); box-shadow: 0px 6px 12px rgba(255, 111, 97, 0.5);" >หมายเลขห้อง</th>
+                <th class="text-center " style="background: linear-gradient(135deg, #ff6f61, #e64a19); box-shadow: 0px 6px 12px rgba(255, 111, 97, 0.5);" >ชื่อห้อง</th>
+                <th class="text-center " style="background: linear-gradient(135deg, #e64a19, #ff6f61); box-shadow: 0px 6px 12px rgba(255, 111, 97, 0.5);">ประเภทห้อง</th>
+                <th class="text-center " style="background: linear-gradient(135deg, #ff6f61, #e64a19); box-shadow: 0px 6px 12px rgba(255, 111, 97, 0.5);">ราคา/คืน</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td class="text-center">
+                    {% if room.image %}
+                        <img src="{{ room.image.url }}" style="width: 300px; height: 250px; object-fit: contain;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                    <br> {{ room.room_number }}
+                </td>
+                <td class="text-center">{{ room.roomname }}</td>
+                <td class="text-center">{{ room.category.name }}</td>
+                <td class="text-center">{{ room.price }}</td>
+                <td class="text-center">
+                    {% if room.booking_set.exists and room.booking_set.last.status == "จองแล้ว" %}
+                        <span class="btn btn-danger btn-md">จองแล้ว</span>
+                    {% else %}
+                        <a href="/RoomDetail/{{ room.room_number }}" class="btn btn-info ">
+                            <i class="fa-solid fa-search"></i> ดูรายละเอียด
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

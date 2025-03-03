@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4 text-center" style="max-width: 500px;">
+        <div class="card-body">
+            <i class="fa fa-user-circle" aria-hidden="true"  style="font-size: 100px;"></i>
+            <h3 class="mb-2">ข้อมูลผู้ใช้</h3>
+            <p><strong>ชื่อผู้ใช้:</strong> {{ user.username }}</p>
+            <p><strong>อีเมล:</strong> {{ user.email }}</p>
+            <p><strong>ตำแหน่ง:</strong> {{ user.get_role_display }}</p>
+
+            {% if customer_profile %}
+                <p><strong>เบอร์โทร:</strong> {{ customer_profile.phone }}</p>
+                <p><strong>ที่อยู่:</strong> {{ customer_profile.address }}</p>
+            {% else %}
+                <p class="text-muted">ไม่มีข้อมูลโปรไฟล์เพิ่มเติม</p>
+            {% endif %}
+
+            <form method="post" action="{% url 'logout' %}" id ="editForm3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100 mt-3">🚪 ออกจากระบบ</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to bottom, #6ebce6, #0c386a);  
+    }
+    .card {
+        border-radius: 15px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+        background: #ffffff;
+        padding: 20px;
+        transition: 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.4);
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.getElementById("editForm3").addEventListener("submit", function(event) {
+    event.preventDefault();
+    Swal.fire({
+        title: "ออกจากระบบ?",
+        text: "คุณต้องการออกจากระบบหรือไม่?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "ใช่, ออกจากระบบ!",
+        cancelButtonText: "ยกเลิก"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "ออกจากระบบแล้ว",
+                text: "คุณได้ออกจากระบบเรียบร้อย",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            setTimeout(() => {
+                event.target.submit();
+            }, 1600);
+        }
+    });
+  });
+</script>
+{% endblock %}

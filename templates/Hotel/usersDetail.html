@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-header text-white text-center bg-primary">
+            <h4 class="mb-0"><i class="fa-solid fa-user"></i> รายละเอียดผู้ใช้</h4>
+        </div>
+        
+        <div class="card-body bg-light">
+            <p><i class="fa-solid fa-user"></i> <strong>Username:</strong> {{ user.username }}</p>
+            <p><i class="fa-solid fa-envelope"></i> <strong>Email:</strong> {{ user.email }}</p>
+            <p><i class="fa-solid fa-user-shield"></i> <strong>สิทธิ์การใช้งาน:</strong> {{ user.get_role_display }}</p>
+            <p><i class="fa-solid fa-calendar"></i> <strong>วันเกิด:</strong> {{ user.birth_date|default:"-" }}</p>
+            <p><i class="fa-solid fa-venus-mars"></i> <strong>เพศ:</strong> {{ user.get_gender_display|default:"-" }}</p>
+
+
+        <div class="card-footer text-center">
+            <a href="{% url 'manage_users' %}" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> กลับ
+            </a>
+        </div>
+    </div>
+</div>
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    .btn-gradient-blue {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .btn-gradient-blue:hover {
+        background: linear-gradient(135deg, #0056b3, #003d80);
+    }
+    .btn-gradient-gray {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .btn-gradient-gray:hover {
+        background: linear-gradient(135deg, #495057, #343a40);
+    }
+</style>
+
+{% endblock %}

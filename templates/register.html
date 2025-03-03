@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>สมัครสมาชิก</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">ชื่อผู้ใช้</label>
+                            {{ form.username }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">อีเมล</label>
+                            {{ form.email }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">บทบาท</label>
+                            {{ form.role }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">วันเกิด</label>
+                            {{ form.birth_date }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">เพศ</label>
+                            {{ form.gender }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">เบอร์โทรศัพท์</label>
+                            {{ form.phone }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">ที่อยู่</label>
+                            {{ form.address }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">รหัสผ่าน</label>
+                            {{ form.password1 }}
+                            <small class="form-text text-muted">
+                                รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษรและไม่เป็นรหัสที่ใช้บ่อย
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">ยืนยันรหัสผ่าน</label>
+                            {{ form.password2 }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">✅ สมัครสมาชิก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to bottom, #6ebce6, #0c386a); 
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+    }
+</style>
+
+{% endblock %}

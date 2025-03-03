@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4 animated fadeInUp" style="background: linear-gradient(145deg, #ffffff, #f8f9fa); box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);">
+        <div class="card-header text-white text-center py-3" style="background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 10px 10px 0 0;">
+            <h4><i class="fa-solid fa-trash"></i> ลบข้อมูลห้องพัก</h4>
+        </div>
+        <div class="card-body p-4" style="border-radius: 0 0 10px 10px;">
+            <table class="table table-hover">
+                <tbody>
+                    <tr><th>🆔 Booking ID</th><td>{{ booking.bid }}</td></tr>
+                    <tr><th>👤 Username</th><td>{{ booking.customer.username }}</td></tr>
+                    <tr><th>🏨 Room Number</th><td>{{ booking.room.room_number }}</td></tr>
+                    <tr><th>📅 Check-in</th><td>{{ booking.check_in_date }}</td></tr>
+                    <tr><th>📆 Check-out</th><td>{{ booking.check_out_date }}</td></tr>
+                    <tr><th>🔖 Status</th><td>{{ booking.status }}</td></tr>
+                </tbody>
+            </table>
+
+            <form method="POST" action="{% url 'bookingDelete' booking.bid %}" id="deleteForm">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger px-4 py-2 shadow delete-btn">
+                        <i class="fa-solid fa-trash"></i> ลบข้อมูล
+                    </button>
+                    <button type="button" class="btn btn-secondary px-4 py-2 shadow cancel-btn" id="cancelBtn">
+                        <i class="fa-solid fa-xmark"></i> ยกเลิก
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById("deleteForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "คุณแน่ใจหรือไม่?",
+            text: "หากลบแล้ว จะไม่สามารถกู้คืนข้อมูลนี้ได้!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "ใช่, ลบเลย!",
+            cancelButtonText: "ยกเลิก"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "กำลังลบ...",
+                    text: "กรุณารอสักครู่",
+                    icon: "info",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                setTimeout(() => {
+                    document.getElementById("deleteForm").submit();
+                }, 1600);
+            }
+        });
+    });
+
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        Swal.fire({
+            title: "ยกเลิกการลบ?",
+            text: "คุณต้องการกลับไปหน้าก่อนหน้าหรือไม่?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#6c757d",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ใช่, กลับไป!",
+            cancelButtonText: "ไม่"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/manage_bookings";  
+            }
+        });
+    });
+</script>
+{% endblock %}

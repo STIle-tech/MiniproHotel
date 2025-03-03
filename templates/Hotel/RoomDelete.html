@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4 animated fadeInUp" style="background: linear-gradient(145deg, #ffffff, #f8f9fa); box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);">
+        <div class="card-header text-white" style="background: linear-gradient(135deg, #ff6f61, #f44336); border-radius: 10px 10px 0 0;">
+            <h4><i class="fa-solid fa-trash"></i> ลบข้อมูลห้องพัก</h4>
+        </div>
+        <div class="card-body p-4" style="background: #fff9e6; border-radius: 0 0 10px 10px;">
+            <table class="table table-striped table-bordered">
+                <tr><th>รหัสห้อง</th><td>{{ room.room_number }}</td></tr>
+                <tr><th>ชื่อห้อง</th><td>{{ room.roomname }}</td></tr>
+                <tr><th>ประเภทห้อง</th><td>{{ room.category }}</td></tr>
+                <tr><th>ราคา</th><td>{{ room.price }}</td></tr>
+                <tr><th>ที่อยู่</th><td>{{ room.address }}</td></tr>
+                <tr><th>ขนาดห้อง</th><td>{{ room.roomsize }}</td></tr>
+                <tr><th>ทิวทัศน์</th><td>{{ room.view }}</td></tr>
+                <tr><th>เตียง</th><td>{{ room.bed }}</td></tr>
+            </table>
+
+            <form method="POST" action="{% url 'RoomDelete' room.room_number %}" id="deleteForm">
+                {% csrf_token %}    
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger px-4 py-2 shadow delete-btn">
+                        <i class="fa-solid fa-check"></i> ลบข้อมูลห้องพัก
+                    </button>
+                    <button type="button" class="btn btn-secondary px-4 py-2 shadow cancel-btn" id="cancelBtn">
+                        <i class="fa-solid fa-xmark"></i> ยกเลิก
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // ✅ ใช้ getElementById แทน querySelector
+    document.getElementById("deleteForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "ยืนยันการลบ?",
+            text: "คุณต้องการลบห้องพักนี้หรือไม่? ข้อมูลจะหายไปถาวร!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "ใช่, ลบเลย!",
+            cancelButtonText: "ยกเลิก"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "กำลังลบ...",
+                    text: "กรุณารอสักครู่",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                setTimeout(() => {
+                    document.getElementById("deleteForm").submit();
+                }, 1600);
+            }
+        });
+    });
+
+    // ✅ ใช้ window.location.href แทน history.back()
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        Swal.fire({
+            title: "ยกเลิกการลบ?",
+            text: "คุณแน่ใจหรือไม่ว่าต้องการยกเลิก?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#6c757d",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ใช่, กลับไป!",
+            cancelButtonText: "ไม่"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/manage_rooms";  // กลับไปหน้าหลัก
+            }
+        });
+    });
+</script>
+
+{% endblock %}
+

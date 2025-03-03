@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Manage Rooms</h1>
+    
+    <div class="d-flex justify-content-end mb-3">
+        <a href="/RoomAdd" class="btn btn-success">
+            <i class="fas fa-plus"></i> เพิ่มห้องพัก
+        </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="text-center">
+                <th class="col col-1">หมายเลขห้องพัก</th>
+                <th class="col col-2">ชื่อห้อง</th>
+                <th class="col col-2">ประเภทห้องพัก</th>
+                <th class="col col-1">ราคา/คืน</th>
+                <th class="col col-1">ขนาดห้อง</th>
+                <th class="col col-1">ประเภทเตียง</th>
+                <th class="col col-2">รูปภาพห้องพัก</th>
+                <th colspan="2" class="col col-2">จัดการ</th>
+                
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr class="text-center">
+                <td>{{ room.room_number }}</td>
+                <td>{{ room.roomname }}</td>
+                <td>{{ room.category.name }}</td>
+                <td>{{ room.price }}</td>
+                <td>{{ room.roomsize }}</td>
+                <td>{{ room.bed }}</td>
+                <td>{{ room.image }}</td>
+                
+                <td >
+                    <!-- ปุ่มดูรายละเอียด (ลูกค้ากดได้) -->
+                    
+                    <div style="display: flex; gap: 5px;">
+                        <a href="/RoomUpdate/{{room.room_number}}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> แก้ไข
+                        </a>
+                        <a href="/RoomDelete/{{room.room_number}}" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> ลบ
+                        </a>
+                        
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 animated fadeInUp" 
+         style="background: linear-gradient(145deg, #ffffff, #f0f0f0); box-shadow: 5px 5px 15px #ccc, -5px -5px 15px #fff;">
+        
+        <!-- หัวข้อจองห้องพัก -->
+        <div class="card-header text-white text-center py-4" 
+             style="background: linear-gradient(135deg, #ff416c, #ff4b2b, #ff512f); box-shadow: 0px 4px 10px rgba(255, 79, 79, 0.5);">
+            <h4 class="mb-0"><i class="fa-solid fa-bed"></i> 🏨 จองห้องพัก</h4>
+        </div>
+        
+        <!-- เนื้อหาของฟอร์ม -->
+        <div class="card-body p-4" style="background: #fdfdfd; border-radius: 10px;">
+            <div class="mb-3">
+                <label class="form-label"><i class="fa-solid fa-door-open"></i> ห้องที่จอง:</label>
+                <input type="text" class="form-control" value="{{ room.room_number }} {{ room.roomname }} {{ room.category.name }} " disabled>  <!-- แสดงชื่อห้อง -->
+            </div>
+            <form method="POST" id="addRoomForm">
+                {% csrf_token %}      
+
+                <div class="mb-3">
+                    {{ form.as_p }}        
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <!-- ปุ่มบันทึก -->
+                    <button type="submit" class="btn btn-success px-4 py-2 shadow save-btn">
+                        <i class=""></i> ✅ บันทึก
+                    </button>
+
+                    <!-- ปุ่มยกเลิก -->
+                    <button type="button" class="btn btn-danger px-4 py-2 shadow cancel-btn" id="cancelBtn">
+                        <i class=""></i> ❌ ยกเลิก
+                    </button>
+                </div>
+            </form>          
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    /* ปุ่มแบบมี Gradient & Hover */
+    .save-btn {
+        background: linear-gradient(135deg, #28a745, #218838);
+        transition: all 0.3s ease-in-out;
+    }
+    .save-btn:hover {
+        background: linear-gradient(135deg, #218838, #1e7e34);
+        transform: translateY(-2px);
+        box-shadow: 0px 5px 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .cancel-btn {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        transition: all 0.3s ease-in-out;
+    }
+    .cancel-btn:hover {
+        background: linear-gradient(135deg, #c82333, #a71d2a);
+        transform: translateY(-2px);
+        box-shadow: 0px 5px 10px rgba(220, 53, 69, 0.3);
+    }
+
+    /* แอนิเมชันตอนโหลด */
+    .animated {
+        animation-duration: 3s;
+        animation-fill-mode: both;
+    }
+    .fadeInUp {
+        animation-name: fadeInUp;
+    }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 3;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        Swal.fire({
+            title: "🚫 ยกเลิกการจอง?",
+            text: "คุณแน่ใจหรือไม่ว่าต้องการยกเลิก?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#e74c3c",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "ใช่, ยกเลิกเลย!",
+            cancelButtonText: "ไม่, กลับไปแก้ไข",
+            reverseButtons: true,
+            backdrop: `rgba(0, 0, 0, 0.5)`,
+            customClass: {
+                popup: 'animated fadeInDown',
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-secondary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/RoomDetail/{{ room.room_number }}";
+            }
+        });
+    });
+</script>
+
+{% endblock %}

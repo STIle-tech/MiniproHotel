@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4">
+    
+    <style>
+        body {
+        background: linear-gradient(to bottom, #6ebce6, #0c386a);  
+    }
+        .carousel-control-prev,
+        .carousel-control-next {
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(95, 90, 90, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease-in-out;
+        }
+        .carousel-control-prev:hover, .carousel-control-next:hover {
+            background-color: rgba(95, 90, 90, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Styling for the icons */
+        .icon-lg {
+            font-size: 24px; /* Increase icon size */
+            margin-right: 12px; /* Space between icon and text */
+        }
+
+        /* Add some padding to the list items */
+        ul li {
+            padding: 12px 0;
+            font-size: 18px;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Hover effect for the list items */
+        ul li:hover {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        /* Styling for the table */
+       
+        table th, table td {
+            padding: 15px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        table th {
+            background-color: #224f7c;
+            font-weight: bold;
+        }
+
+        /* Button Styling */
+        .btn-warning {
+            background-color: #ffcc00;
+            border-color: #ffcc00;
+            transition: all 0.3s ease;
+        }
+        .btn-warning:hover {
+            background-color: #e6b800;
+            border-color: #e6b800;
+        }
+
+        /* Frame container */
+        .frame-container {
+            border: 5px solid #0000007b; /* กรอบรอบๆ ข้อมูล */
+            border-radius: 15px; /* มุมกรอบโค้งมน */
+            background-color: #ffffff; /* สีพื้นหลังด้านในกรอบ */
+            padding: 30px; /* ระยะห่างภายในกรอบ */
+            box-shadow: 0 4px 12px rgb(255, 255, 255); /* เพิ่มเงารอบๆ กรอบ */
+        }
+
+        .room-details-card {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .room-details-card h5 {
+            color: #007bff;
+        }
+
+        .room-details-card .room-info {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* Add border around the list */
+        ul.list-unstyled {
+            border: 2px solid #007bff; /* Adding a border around the list */
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #ffffff; /* White background for the list */
+        }
+        
+    </style>
+    
+    
+    <div class="frame-container">
+        <div id="carouselExample" class="carousel slide position-relative" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <p>
+                    <a href="/RoomList" class="btn btn-secondary">
+                        <i class="fa-solid fa-rotate-left"></i> กลับสู่รายการห้องพัก
+                    </a>
+                </p>
+                
+                <h4 class="text-primary text-center mb-4">รายละเอียดจองห้อง</h4>
+                
+                {% for i in 1|rjust:3 %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ room.image.url }}" class="d-block w-100" style="height: 600px; object-fit: cover;" alt="Slide {{ forloop.counter }}">
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <div class="room-details-card">
+            <h5 class="text-center">ข้อมูลห้องพัก</h5>
+            <table class="table table-bordered table-hover mt-4 text-center">
+                <tr>
+                    <td class="text-primary" style="font-size: 20px;">ชื่อ : {{ room.roomname }}</td>
+                    <td class="text-primary" style="font-size: 20px;">รหัสห้อง : {{ room.room_number }}</td>
+                    <td class="text-primary" style="font-size: 20px;">ราคา : {{ room.price }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <ul class="list-unstyled">
+            <li><i class="fa fa-car text-success icon-lg"></i> <b>ที่จอดรถฟรี</b></li>
+            <li><i class="fa fa-arrows-alt text-success icon-lg"></i> <b>{{ room.roomsize }}</b></li>
+            <li><i class="fa fa-building text-success icon-lg"></i> <b>{{ room.view }}</b></li>
+            <li><i class="fa fa-bed text-success icon-lg"></i> <b>{{ room.bed }}</b></li>
+            <li><i class="fa fa-home text-success icon-lg"></i> <b>{{ room.category.name }}</b></li>
+        </ul>
+
+        <a href="/booking/{{ room.room_number }}" class="btn btn-warning btn-lg d-block text-center mt-3">
+            <i class="fa fa-building"></i> คลิ๊กจองห้องพัก
+        </a>
+
+        <h4 class="mt-4 text-primary">สิ่งอำนวยความสะดวกในห้องพัก</h4>
+        <table class="table table-bordered table-hover mt-3">
+            <tr>
+                <td>
+                    <i class="fa fa-bed text-primary icon-lg"></i> <b>ห้องนอน</b><br>
+                    * เครื่องปรับอากาศ<br> * ผ้าปูที่นอนพรีเมียม<br> * ผ้าม่านกันแสง<br> * เตียงเสริม (มีค่าบริการ)<br>
+                </td>
+                <td>
+                    <i class="fa fa-bath text-primary icon-lg"></i> <b>ห้องน้ำ</b><br>
+                    * เสื้อคลุมอาบน้ำ<br> * ไดร์เป่าผม<br> * อ่างอาบน้ำและฝักบัวแยกจากกัน<br> * ผ้าขนหนู<br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="fa fa-cutlery text-primary icon-lg"></i> <b>อาหารและเครื่องดื่ม</b><br>
+                    * รูมเซอร์วิส 24 ชั่วโมง<br> * เครื่องชงกาแฟ/ชา<br> * มินิบาร์<br> * ตู้เย็น<br>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br><br>
+</div>
+
+{% endblock %}

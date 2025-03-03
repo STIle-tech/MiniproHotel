@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Manage Bookings</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr >
+                <th>Booking ID</th>
+                <th>Username</th>
+                <th>Room Number</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr class="text-center">
+                <td>{{ booking.bid }}</td>
+                <td>{{ booking.customer.username }}</td>  {# ใช้ customer แทน user #}
+                <td>{{ booking.room.room_number }}</td>  {# ใช้ room.room_number แทน room.number #}
+                <td>{{ booking.check_in_date }}</td>  {# ใช้ check_in_date แทน check_in #}
+                <td>{{ booking.check_out_date }}</td>  {# ใช้ check_out_date แทน check_out #}
+                <td>
+                    {% if booking.status == "จองแล้ว" %}
+                        <span class="badge bg-success">✅ จองสำเร็จแล้ว</span>
+                    {% else %}
+                        <span class="badge bg-danger">❌ จองล้มเหลว</span>
+                    {% endif %}
+                </td>
+                <td class="text-center" >
+                    <a href="/bookingDelete/{{booking.bid}}" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> ลบ
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No bookings found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

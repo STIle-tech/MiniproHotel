@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    /* ดีไซน์กล่องเนื้อหา */
+    .payment-container {
+        max-width: 450px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        position: relative;
+        border: 3px solid transparent;
+        background-clip: padding-box;
+    }
+
+    /* กรอบสีไล่ระดับ (Gradient Border) */
+    .payment-container::before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        right: -3px;
+        bottom: -3px;
+        z-index: -1;
+        border-radius: 15px;
+    }
+
+    /* หัวข้อ */
+    .payment-container h2 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 22px;
+    }
+
+    /* กล่องข้อมูล */
+    .payment-info {
+        background: rgba(236, 240, 241, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: left;
+        box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-info p {
+        margin: 12px 0;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    .payment-info p i {
+        margin-right: 10px;
+        color: #2980b9;
+        font-size: 18px;
+    }
+
+    .amount {
+        color: #e74c3c;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    /* ช่องอัปโหลดไฟล์ */
+    .upload-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .upload-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    .upload-input:hover {
+        border-color: #2980b9;
+        box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
+    }
+
+    /* ปุ่มยืนยัน */
+    .submit-btn {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.3s;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #27ae60, #219150);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(39, 174, 96, 0.5);
+    }
+
+    /* สำหรับมือถือ */
+    @media (max-width: 480px) {
+        .payment-container {
+            max-width: 90%;
+            padding: 20px;
+        }
+    }
+    .animated1 {
+        animation-duration: 3s;
+        animation-fill-mode: both;
+    }
+    .fadeInUp1 {
+        animation-name: fadeInUp;
+    }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 3;
+            transform: translateY(0);
+        }
+    }
+
+    
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+<!-- กล่องเนื้อหาหลัก -->
+<div class="payment-container animated1 fadeInUp1">
+    <h2>💳 ชำระเงินสำหรับการจอง #{{ booking.bid }}</h2>
+
+    <!-- กล่องข้อมูลการจอง -->
+    <div class="payment-info">
+        <p><i class="bi bi-person-check"></i> <strong>ชื่อผู้จอง:</strong> {{user.username|default:"-"}}</p>
+        <p><i class="fas fa-calendar-alt"></i> <strong>จำนวนวันที่เข้าพัก:</strong> {{ nights|default:"-" }} คืน</p>
+        <p><i class="fas fa-user-friends"></i> <strong>จำนวนคนเข้าพัก:</strong> {{ number|default:"-" }} คน</p>
+        <p><i class="fas fa-money-bill-wave"></i> <strong>จำนวนเงินที่ต้องจ่าย:</strong> <span class="amount">{{ total_price|default:"-" }} บาท</span></p>
+        
+    </div>
+
+    <!-- ฟอร์มอัปโหลดสลิป -->
+    <form id="payment-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label class="upload-label">📤 อัปโหลดสลิปการชำระเงิน:</label>
+        <input type="file" name="payment_slip" required class="upload-input">
+        
+        <button type="submit" class="submit-btn">✅ ยืนยันการชำระเงิน</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("payment-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // ป้องกันการ submit ปกติ
+
+        Swal.fire({
+            icon: 'success',
+            title: '🎉 ชำระเงินสำเร็จ!',
+            text: 'ห้องของคุณถูกจองเรียบร้อยแล้ว',
+            confirmButtonColor: '#28a745',
+            confirmButtonText: 'ตกลง'
+        }).then(() => {
+            // ส่งฟอร์มหลังจากกด OK
+            event.target.submit();
+        });
+    });
+</script>
+
+{% endblock %}
+
+

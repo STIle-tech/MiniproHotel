@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4 animated fadeInUp" 
+         style="background: #fff; box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);">
+        <div class="card-header text-white text-center py-3" 
+             style="background: #c0392b; border-radius: 10px 10px 0 0;">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-user-slash"></i> ลบข้อมูลผู้ใช้
+            </h4>
+        </div>
+        <div class="card-body p-4" style="border-radius: 0 0 10px 10px;">
+            <table class="table table-bordered">
+                <tr>
+                    <th><i class="fa-solid fa-id-badge"></i> ID</th>
+                    <td>{{ customUser.id }}</td>
+                </tr>
+                <tr>
+                    <th><i class="fa-solid fa-user"></i> Username</th>
+                    <td>{{ customUser.username }}</td>
+                </tr>
+                <tr>
+                    <th><i class="fa-solid fa-envelope"></i> Email</th>
+                    <td>{{ customUser.email }}</td>
+                </tr>
+                <tr>
+                    <th><i class="fa-solid fa-user-check"></i> Status</th>
+                    <td>
+                        {% if user.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Banned</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+
+            <form method="POST" action="{% url 'usersDelete' customUser.id %}" id="deleteForm">
+                {% csrf_token %}    
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger px-4 py-2 shadow">
+                        <i class="fa-solid fa-trash"></i> ลบข้อมูล
+                    </button>
+                    <button type="button" class="btn btn-secondary px-4 py-2 shadow" id="cancelBtn">
+                        <i class="fa-solid fa-xmark"></i> ยกเลิก
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById("deleteForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "ยืนยันการลบ?",
+            text: "คุณต้องการลบผู้ใช้นี้หรือไม่? ข้อมูลจะหายไปถาวร!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "ใช่, ลบเลย!",
+            cancelButtonText: "ยกเลิก"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "กำลังลบ...",
+                    text: "กรุณารอสักครู่",
+                    icon: "info",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setTimeout(() => {
+                    document.getElementById("deleteForm").submit();
+                }, 1600);
+            }
+        });
+    });
+
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        Swal.fire({
+            title: "ยกเลิกการลบ?",
+            text: "คุณแน่ใจหรือไม่ว่าต้องการยกเลิก?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#6c757d",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ใช่, กลับไป!",
+            cancelButtonText: "ไม่"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/manage_users";
+            }
+        });
+    });
+</script>
+
+{% endblock %}

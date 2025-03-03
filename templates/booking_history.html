@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2>📌 ประวัติการจองของคุณ</h2>
+    <table class="table table-bordered mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>ห้อง</th>
+                <th>วันเช็คอิน</th>
+                <th>วันเช็คเอาท์</th>
+                <th>ราคา</th>
+                <th>สถานะ</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.room.room_number }}</td>  {# ใช้ room.room_number แทน room.number #}
+                <td>{{ booking.check_in_date }}</td>  {# ใช้ check_in_date แทน check_in #}
+                <td>{{ booking.check_out_date }}</td>
+                <td>{{ booking.total_price }} บาท</td>
+                <td>
+                    {% if booking.status == "จองแล้ว" %}
+                        <span class="badge bg-success">✅ จองสำเร็จแล้ว</span>
+                    {% else %}
+                        <span class="badge bg-danger">❌ จองล้มเหลว</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">ไม่มีประวัติการจอง</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    
+</style>
+
+{% endblock %}
