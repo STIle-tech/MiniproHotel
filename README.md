@@ -4,7 +4,7 @@
    git clone https://github.com/STIle-tech/MiniproHotel.git
    (แนะนำให้ clone ไว้ในโฟลเดอร์ชื่อ MiniproHotel)
    
-2.ใช้คำสั้ง ใน Terminal
+ 2.ใช้คำสั้ง ใน Terminal
    cd MiniproHotel
 
 3. สร้าง Virtual Environment และเปิดใช้งาน:
